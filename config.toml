@@ -1,4 +1,4 @@
-baseurl = "https://upinus-tech-blog.netlify.com"
+baseurl = "https://blog.upinus.dev"
 languageCode = "en"
 title = "Upinus Tech Blog"
 theme = "kiss"
@@ -49,13 +49,6 @@ facebook = ""
 
 [params.social.config]
 platforms = ["twitter","github","email","linkedin","instagram"]
-
-[params.matomoAnalytics]
-siteID = 1
-rootURL = "//matomo.example.com/"
-
-[params.fathomAnalytics]
-rootURL = "//fathom.example.com/"
 
 [taxonomies]
 tag ="tags"
