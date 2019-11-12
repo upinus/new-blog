@@ -16,17 +16,17 @@ disqusOnDemand = false  # Load Disqus comments on click
 customCSS = ["css/custom.css"]
 
 [params.rss]
-
 includeContent = true # Includes whole content in rss
 authorName = "Bao Ho" # Site author's full name
 authorEmail = "hogiabaor@gmail.com"
 
 [params.info]
 adsense = "" # Adsense ID (ID only, without ca-pub-)
-enableSocial = false # Adds OpenGraph and Twitter cards
+enableSocial = true # Adds OpenGraph and Twitter cards
 homeTitle = "Upinus Tech Blog" # Title for home page
 poweredby = true # Adds powered by Hugo and Kiss below Copyright section
 related = true # Includes related articles
+description = "Things about software craftsmanship, personal development and life at Upinus"
 
 [params.opengraph.facebook]
 admins = [] # array of Facebook IDs
@@ -37,7 +37,6 @@ pageID = ""
 page = "" # Twitter Page username. If not set, params.social.twitter will be used.
 
 [params.social]
-
 twitter = ""
 github = "upinus"
 email = ""
