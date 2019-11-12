@@ -3,14 +3,14 @@ languageCode = "en"
 title = "Upinus Tech Blog"
 theme = "kiss"
 copyright = "&copy; <a href=\"https://github.com/upinus\">Upinus</a> 2019"
-disqusShortname = "shortname"
+disqusShortname = "upinus-tech-blog"
 googleAnalytics = ""
 # Number of posts per page
 Paginate = 5
 enableRobotsTXT = true
 
 [params.features]
-disqusOnDemand = true  # Load Disqus comments on click
+disqusOnDemand = false  # Load Disqus comments on click
 
 [params.assets]
 customCSS = ["css/custom.css"]
