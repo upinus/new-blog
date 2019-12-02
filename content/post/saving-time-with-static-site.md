@@ -1,7 +1,7 @@
 ---
 title: Saving time with static sites
 author: TuCQ
-date: 2019-12-02 09:38:00
+date: 2019-12-02 09:30:00+07:00
 summary: Intro ajkn's works which helps building static sites eaiser
 ---
 
