@@ -6,7 +6,7 @@ copyright = "&copy; <a href=\"https://github.com/upinus\">Upinus</a> 2019"
 disqusShortname = "upinus-tech-blog"
 googleAnalytics = ""
 # Number of posts per page
-Paginate = 5
+Paginate = 10
 enableRobotsTXT = true
 
 [params.features]
@@ -54,4 +54,3 @@ tag ="tags"
 
 [blackfriday]
 hrefTargetBlank = true
-
