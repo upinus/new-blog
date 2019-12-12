@@ -1,17 +1,20 @@
 ---
 title: Python3 tìm kiếm thuộc tính trong class như thế nào?
 author: LongBB
-date: 2019-06-29 11:38:00
+date: 2019-06-29 11:38:00+07:00
+tags: ['python']
 ---
 
 
 Nếu là người đã từng làm việc với Python thì chắc hẳn chẳng ai lạ gì cú pháp `C.x` để truy cập thuộc tính `x` của class `C`. Tuy nhiên, làm thế nào để Python có thể tìm biết được class `C` có tồn tại thuộc tính `x` hay không và nếu có tồn tại thì thuộc tính `x` này sẽ được lấy ra từ đâu khi mà Python cho phép đa kế thừa ? (Giả sử trong trường hợp `C` kế thừa 2 classs và cả 2 class base của `C` đều có thuộc tính `x`, vậy `C` biết nghe theo ai, bố mẹ hay ông hàng xóm)
 Bài viết dưới đây sẽ trình bày một cách ngắn gọn về cách mà Python tìm kiếm một thuộc tính của class (hoặc instance) khi được yêu cầu. Tuy nhiên, trước khi đi vào phần chính này, ta cần phải biết một khái niệm cơ bản trong Python là `descriptor`.
 
-**Chú ý:** Nội dung bài viết được áp dụng cho **Python3**, có thể không chính xác cho **Python2** và các phiên bản cũ hơn. 
+**Chú ý:** Nội dung bài viết được áp dụng cho **Python3**, có thể không chính xác cho **Python2** và các phiên bản cũ hơn.
+
 ## 1. Descriptor là gì? Các loại descriptor
 ### 1.1. Khái niệm về descriptor
 `Descriptor` là bất kỳ đối tượng nào trong Python mà cung cấp 1 phương thức đặc biệt là `__get__`. Đối với class, khi có một thuộc tính là descriptor thì ta có thể kiểm soát việc truy xuất thuộc tính này thông qua phương thức đặc biệt là `__get__` và `__set__` của descriptor. Nói cách khác, khi truy cập một thuộc tính của class, Python sẽ tiến hành lấy giá trị của thuộc tính bằng cách gọi hàm `__get__` trên descriptor tương ứng (nếu tồn tại).
+
 **Ví dụ 1:**
 ```python
 class TestDescriptor(object):
@@ -25,23 +28,27 @@ class TestClass(object):
 test_instance = TestClass()
 print(test_instance.x) # 4
 ```
+
 ### 1.2. Các loại descriptor
 Như đã trình bày ở phần trên, bất kỳ đối tượng nào cung cấp phương thức `__get__` đều được gọi là `descriptor`. Tuy nhiên, nếu descriptor này cung cấp thêm phương thức `__set__` thì descriptor này sẽ được gọi là `overriding descriptor`. Ngược lại, nếu không có phương thức `__set__` thì descriptor sẽ được gọi là `nonoverriding descriptor`. Ở ví dụ trên, `TestDescriptor` là một `nonoverriding descriptor`.
 Đối với `overriding descriptor`, phương thức `__set__` giúp quản lý việc nhập giá trị đầu vào. Nếu 1 class có 1 thuộc tính là `overriding descriptor`, khi nhập giá trị cho thuộc tính đó, Python sẽ thiết lập giá trị của thuộc tính bằng cách gọi phương thức `__set__` của thuộc tính (nếu có).
 Vậy là ta đã hiểu về khái niệm descriptor trong Python, sau đây chúng ta sẽ đi đến phần chính cùa bài viết: tìm hiểu về cách thức tìm kiếm thuộc tính trong Python.
+
 ## 2. Cách thức tìm kiếm thuộc tính của Python
 ### 2.1. Cách thức tìm kiếm thuộc tính trong class của Python
-Python là một ngôn ngữ hường đối tượng và đương nhiên cho phép việc thực thi tính kế thừa trong hường đối tượng. Vì vậy, một class trong Python thay vì chỉ có các thuộc tính của nó mà nó sẽ có thể truy cập cả các thuộc tính của lớp cha (lớp base) nữa (Thuộc tính ở đây bao gồm cả các`callable attributes` hay còn gọi là các `methods`). 
-Việc xác định thuộc tính `x` khi gọi `C.x` sẽ rất đơn giản trong trường hợp chỉ có đơn kế thừa. Lúc đó, nếu thuộc tính không tồn tại ở lớp con sẽ được tìm dần lên các lớp base của nó, cứ như vậy cho đến khi tìm thấy thuộc tính `x`. Tuy nhiên, Python cho phép đa kế thừa nên cần có độ ưu tiên giữa các class base. 
+Python là một ngôn ngữ hường đối tượng và đương nhiên cho phép việc thực thi tính kế thừa trong hường đối tượng. Vì vậy, một class trong Python thay vì chỉ có các thuộc tính của nó mà nó sẽ có thể truy cập cả các thuộc tính của lớp cha (lớp base) nữa (Thuộc tính ở đây bao gồm cả các`callable attributes` hay còn gọi là các `methods`).
+Việc xác định thuộc tính `x` khi gọi `C.x` sẽ rất đơn giản trong trường hợp chỉ có đơn kế thừa. Lúc đó, nếu thuộc tính không tồn tại ở lớp con sẽ được tìm dần lên các lớp base của nó, cứ như vậy cho đến khi tìm thấy thuộc tính `x`. Tuy nhiên, Python cho phép đa kế thừa nên cần có độ ưu tiên giữa các class base.
 Để có thể tìm kiếm một thuộc tính `x` của class `C` trong môi trường đa kế thừa, Python thực hiện theo chiến lược gồm 2 bước sau:
-- **Bước 1:** Kiểm tra xem `x` có phải là key của `C.__dict__` hay không (Thông thường, 1 class sẽ lưu trữ các thông tin về các attribute của nó trong 1 dictionary với key là các attribute của class và value tương ứng là giá trị của các attribute đó. Python cho phép truy cập dictionary đó thông qua một attribute đặc biệt gọi là `__dict__`). Nếu `x` đúng là một key của `C.__dict__`, Python sẽ lấy ra giá trị `v` của `x` từ `C.__dict__`: `v = C.__dict__[x]`. Nếu `v` là một `descriptor` thì kết quả của lời gọi `C.x` là: 
+
+- **Bước 1:** Kiểm tra xem `x` có phải là key của `C.__dict__` hay không (Thông thường, 1 class sẽ lưu trữ các thông tin về các attribute của nó trong 1 dictionary với key là các attribute của class và value tương ứng là giá trị của các attribute đó. Python cho phép truy cập dictionary đó thông qua một attribute đặc biệt gọi là `__dict__`). Nếu `x` đúng là một key của `C.__dict__`, Python sẽ lấy ra giá trị `v` của `x` từ `C.__dict__`: `v = C.__dict__[x]`. Nếu `v` là một `descriptor` thì kết quả của lời gọi `C.x` là:
 ```python
 C.x = type(v).__get__(v, None, C)
 ```
-- **Bước 2:** Nếu `x` không phải là key nằm trong `C.__dict__`, Python sẽ tiếp tục tìm kiếm trên các lớp base của `C`. Quá trình lặp lại cho đến khi tìm được thuộc tính `x`. Nếu khi lặp qua tất cả các class tổ tiên của `C` mà vẫn không tìm được thuộc tính `x` thì Python sẽ đưa ra lỗi `AttributeError`. 
+- **Bước 2:** Nếu `x` không phải là key nằm trong `C.__dict__`, Python sẽ tiếp tục tìm kiếm trên các lớp base của `C`. Quá trình lặp lại cho đến khi tìm được thuộc tính `x`. Nếu khi lặp qua tất cả các class tổ tiên của `C` mà vẫn không tìm được thuộc tính `x` thì Python sẽ đưa ra lỗi `AttributeError`.
 
-Python thực hiện tìm kiếm thuộc tính `x` trong các class base của `C` ở bước 2 theo thứ tự ***"left to right, depth first"***. Ta có thể tưởng tượng thứ tự ưu tiên của tìm kiếm của Python tương tự với duyệt cây theo chiều sâu (`DFS`) với gốc là class gọi tìm kiếm thuộc tính, các node phía dưới là các lớp base của node phía trên. 
+Python thực hiện tìm kiếm thuộc tính `x` trong các class base của `C` ở bước 2 theo thứ tự ***"left to right, depth first"***. Ta có thể tưởng tượng thứ tự ưu tiên của tìm kiếm của Python tương tự với duyệt cây theo chiều sâu (`DFS`) với gốc là class gọi tìm kiếm thuộc tính, các node phía dưới là các lớp base của node phía trên.
 Để có thể hiểu về thứ tự này, ta có theo dõi ví dụ sau:
+
 **Ví dụ 2:**
 ```python
 class A(): x = 'a'
@@ -74,6 +81,7 @@ Giá trị của thuộc tính `x` của class A là string `'a'`, không phải
 True
 ```
 Tuy nhiên, trong nhiều trường hợp, nếu chỉ đơn thuần sử dụng thứ tự ***"left to right, depth first"*** thì sẽ gặp phải tính huống 1 class bị duyệt qua 2 lần. Để có thể tránh tình trạng này, Python sẽ chỉ duyệt qua các class bị trùng vào lần xuất hiện cuối cùng của chúng, các lần trước đó sẽ bị bỏ qua trong quá trình duyệt (***rightmost occurrence***).
+
 **Ví dụ 3:**
 ```python
 class A(): x = 'a'
@@ -110,6 +118,7 @@ def get_attribute(class_object, attribute_name):
 ```
 ### 2.2. Cách thức tìm kiếm thuộc tính trong instance của Python
 Cách thức tìm kiếm thuộc tính trong instance của Python cũng gần tương tự với cách tìm kiếm thuộc tính trong class. Cụ thể, khi tìm kiếm thuộc tính `x` của instance `i` của class `C`, Python sẽ tiến hành theo 3 bước sau:
+
 - **Bước 1:** Tìm kiếm trên class `C` (hoặc các class tổ tiên của `C`) thuộc tính `x`. Nếu tìm thấy `x` và giá trị `v` của `x` là overriding descriptor (`x` có cả phương thức `__get__` và `__set__`) thì giá trị của việc gọi `i.x` là:
 ```python
 type(v).__get__(v, i, C)

@@ -2,14 +2,16 @@
 title: Saving time with static sites
 author: TuCQ
 date: 2019-12-02 09:30:00+07:00
-summary: Intro ajkn's works which helps building static sites eaiser
+summary: Intro ajkn's works which helps building static sites easier
+tags: ['html']
 ---
 
 
-https://twitter.com/ajlkn is a developer who's owner of 03 products
-    - https://carrd.co/
-    - https://html5up.net/
-    - https://pixelarity.com/
+[ajlkn](https://twitter.com/ajlkn) is a developer who's owner of 03 products:
+
+- [Carrd](https://carrd.co/)
+- [HTML5 UP!](https://html5up.net/)
+- [Pixelarity](https://pixelarity.com/)
 
 In three of theme, HTML5Up is a collection of free and handsome template, which is ready for you to adding customization and deploy on your need.
 To be honest, we were pretty surprised by its quality (and quantity). Actually, you don't need to purchase commercial themes and templates once you've known this site.

@@ -1,8 +1,9 @@
 ---
 title: How to allow remote connection to Postgres server
 author: ThaiNT
-date: 2019-06-20 11:38:00
+date: 2019-06-20 11:38:00+07:00
 summary: This tutorial show you configurations on Postgres server which will allow connections from remote.
+tags: ['database', 'ops']
 ---
 
 ## Step 1: Setup postgresql.conf
