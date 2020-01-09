@@ -1,7 +1,7 @@
 ---
 title: Basic parts of speech in English
 author: TuCQ
-date: 2020-12-11 11:52:00+07:00
+date: 2020-01-09 11:52:00+07:00
 tags: ['english', 'english grammar']
 ---
 
