@@ -31,6 +31,6 @@ HUGO_ENABLEGITINFO = "true"
 
 [[redirects]]
   from = "https://upinus-tech-blog.netlify.app/*"
-  to = "https://blog.upinus.dev/"
+  to = "https://blog.upinus.dev/:splat"
   status = 301
   force = true
