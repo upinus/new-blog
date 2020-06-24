@@ -1,7 +1,7 @@
 ---
 title: Be consistent while you're programming
 author: ChienNV
-date: 2020-06-24 12:00:00+07:00
+date: 2020-06-24 00:00:00+07:00
 tags: ['clean code', 'consistency']
 ---
 
