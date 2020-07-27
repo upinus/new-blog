@@ -1,4 +1,4 @@
-# Upinus Tech Blog
+# Tech Blog
 
 ## Developement
 ```bash
